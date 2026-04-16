@@ -94,33 +94,7 @@
       letter-spacing: 0.06em;
     }
 
-    .api-key-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
 
-    .api-key-label {
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .api-input {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      padding: 8px 14px;
-      border-radius: 8px;
-      width: 260px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .api-input::placeholder { color: var(--muted); }
-    .api-input:focus { border-color: var(--accent); }
 
     /* Main layout */
     main {
@@ -181,8 +155,6 @@
     @media (max-width: 760px) {
       .columns { grid-template-columns: 1fr; }
       header { flex-direction: column; gap: 16px; align-items: flex-start; }
-      .api-key-wrapper { width: 100%; }
-      .api-input { width: 100%; }
       main { padding: 40px 20px 80px; }
     }
 
@@ -509,10 +481,7 @@
       NoteParse <span style="color:var(--accent)">2</span>
       <span class="logo-badge">BETA</span>
     </div>
-    <div class="api-key-wrapper">
-      <span class="api-key-label">API Key</span>
-      <input type="password" class="api-input" id="api-key" placeholder="" autocomplete="off" />
-    </div>
+
   </header>
 
   <main>
@@ -581,12 +550,14 @@
   </main>
 
   <script>
+    // --- Config ---
+    const API_KEY = "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"; // 🔑 Replace this with your key
+
     // --- State ---
     const files = [];
     let isRunning = false;
 
     // --- DOM ---
-    const apiKeyInput = document.getElementById('api-key');
     const inputText = document.getElementById('input-text');
     const charCount = document.getElementById('char-count');
     const fileCount = document.getElementById('file-count');
@@ -604,6 +575,7 @@
     const outputMeta = document.getElementById('output-meta');
     const copyBtn = document.getElementById('copy-btn');
     const browseBtn = document.getElementById('browse-btn');
+
 
     // --- Text input counter ---
     inputText.addEventListener('input', () => {
@@ -674,11 +646,8 @@
     function checkRunnable() {
       const hasText = inputText.value.trim().length > 0;
       const hasFiles = files.length > 0;
-      const hasKey = apiKeyInput.value.trim().length > 10;
-      runBtn.disabled = !(hasText && hasFiles && hasKey);
+      runBtn.disabled = !(hasText && hasFiles);
     }
-
-    apiKeyInput.addEventListener('input', checkRunnable);
 
     // --- Read file as text ---
     function readFileText(file) {
@@ -741,7 +710,7 @@
       statusChip.classList.add('visible');
       statusText.textContent = 'Reading your files...';
 
-      const apiKey = "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"
+      const apiKey = API_KEY;
       const userText = inputText.value.trim();
 
       try {
