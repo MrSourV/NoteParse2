@@ -672,7 +672,7 @@
       <div class="terms-body">
         <div class="terms-item">
           <div class="ti-icon">✍️</div>
-          <div class="ti-text"><strong>What is this?</strong> Hi! This software was initially by kevin, and a group of developers in the peel region. This software is used to match the style, by figuring out tone, repeated words, and overall language, and matching that with the new text.</div>
+          <div class="ti-text"><strong>Style transfer only.</strong> This tool matches the writing style of your reference documents — not to copy or reproduce someone else's content.</div>
         </div>
         <div class="terms-item">
           <div class="ti-icon">🚫</div>
@@ -688,7 +688,7 @@
         </div>
       </div>
       <div class="terms-footer">
-        <button class="agree-btn" id="agree-btn">Let me in already 🥱</button>
+        <button class="agree-btn" id="agree-btn">I Understand — Let Me In</button>
         <div class="agree-note">By continuing you agree to use this tool responsibly.</div>
       </div>
     </div>
@@ -697,7 +697,7 @@
   <!-- APP -->
   <div id="app">
     <header>
-      <div class="logo"><span class="logo-np">NoteParse</span>2 <span class="logo-badge">BETA</span></div>
+      <div class="logo"><span class="logo-np">NP</span>2 <span class="logo-badge">STYLE ENGINE</span></div>
     </header>
 
     <section class="hero">
@@ -707,7 +707,7 @@
         Your words.<br />
         <span class="outline">Their <span class="filled">style.</span></span>
       </h1>
-      <p class="hero-p">Paste your text and upload writing samples as references. NoteParse 2 will rewrite your content to match the tone, structure, and voice of your documents.</p>
+      <p class="hero-p">Paste your text and upload writing samples as references. NoteParse 2 will rewrite your content to match the tone, structure, and voice of your documents — preserving every idea, changing only the style.</p>
     </section>
 
     <section class="workspace">
@@ -934,7 +934,25 @@
           body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
             max_tokens: 2048,
-            system: `You are a writing style analyst and rewriter. Rewrite the user's text so it closely mirrors the writing style, tone, sentence structure, vocabulary, and voice found in the reference documents.\n\nRules:\n- Preserve ALL meaning and information\n- Change ONLY the style, not the content\n- Match vocabulary, sentence rhythm, formality, and tone of the references\n- Do NOT add facts or remove existing ones\n- Return ONLY the rewritten text. No preamble.`,
+            system: `You are a writing style transfer engine. Your sole job is to rewrite the user's text so it matches the writing style of the reference documents as closely as possible — NOT to paraphrase or simplify.
+
+Analyze the reference documents for:
+- Characteristic vocabulary and repeated words or phrases the author favors
+- Sentence length patterns (short and punchy vs long and flowing)
+- Grammar habits (comma usage, conjunctions, how clauses are joined)
+- Punctuation style (em dashes, semicolons, ellipses, etc.)
+- Capitalization quirks or unconventional spelling choices the author uses consistently
+- Tone and formality level
+- How the author opens and closes sentences
+- Any distinctive structural patterns (e.g. lists, parentheticals, rhetorical questions)
+
+Rules:
+- Do NOT paraphrase. Keep the user's original wording as much as possible.
+- Only change words, structure, or phrasing when needed to match the reference style.
+- Do NOT correct spelling or grammar unless the reference documents themselves use correct spelling/grammar — if the author makes consistent errors or stylistic choices, replicate them.
+- Preserve ALL the original meaning and information from the user's text.
+- Do NOT add new facts, opinions, or content.
+- Return ONLY the rewritten text. No introduction, no explanation, no commentary.`,
             messages: [{ role: 'user', content: `Reference documents:\n\n${examples}\n\n---\n\nRewrite this text to match that style:\n\n${inputText.value.trim()}` }],
           }),
         });
