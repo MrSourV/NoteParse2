@@ -31,7 +31,6 @@
       overflow-x: hidden;
     }
 
-    /* Grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -42,7 +41,6 @@
       opacity: 0.4;
     }
 
-    /* Glowing bg blobs */
     .bg-blob {
       position: fixed;
       border-radius: 50%;
@@ -61,7 +59,6 @@
       bottom: -100px; right: -100px;
     }
 
-    /* Header */
     header {
       position: relative;
       z-index: 10;
@@ -94,9 +91,6 @@
       letter-spacing: 0.06em;
     }
 
-
-
-    /* Main layout */
     main {
       position: relative;
       z-index: 10;
@@ -132,9 +126,7 @@
       margin-bottom: 16px;
     }
 
-    h1 span {
-      color: var(--accent);
-    }
+    h1 span { color: var(--accent); }
 
     .subtitle {
       font-size: 0.82rem;
@@ -144,7 +136,6 @@
       margin-bottom: 56px;
     }
 
-    /* Two-column layout */
     .columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -190,18 +181,14 @@
     }
 
     .panel-dot {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--border);
     }
     .panel-dot.active { background: var(--accent); }
     .panel-dot.accent2 { background: var(--accent2); }
 
-    .char-count {
-      font-size: 0.65rem;
-      color: var(--muted);
-    }
+    .char-count { font-size: 0.65rem; color: var(--muted); }
 
     textarea {
       background: transparent;
@@ -218,7 +205,6 @@
     }
     textarea::placeholder { color: var(--muted); }
 
-    /* File upload zone */
     .upload-zone {
       border: 1.5px dashed var(--border);
       border-radius: 10px;
@@ -233,27 +219,14 @@
       background: rgba(90, 240, 200, 0.03);
     }
 
-    .upload-icon {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      opacity: 0.5;
-    }
+    .upload-icon { font-size: 1.8rem; margin-bottom: 10px; opacity: 0.5; }
 
-    .upload-text {
-      font-size: 0.72rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-    .upload-text strong {
-      color: var(--accent2);
-      font-weight: 500;
-      cursor: pointer;
-    }
+    .upload-text { font-size: 0.72rem; color: var(--muted); line-height: 1.6; }
+    .upload-text strong { color: var(--accent2); font-weight: 500; cursor: pointer; }
     .upload-text strong:hover { text-decoration: underline; }
 
     #file-input { display: none; }
 
-    /* File list */
     .file-list {
       padding: 0 18px 18px;
       display: flex;
@@ -287,11 +260,7 @@
       flex: 1;
     }
 
-    .file-chip-size {
-      font-size: 0.62rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
+    .file-chip-size { font-size: 0.62rem; color: var(--muted); white-space: nowrap; }
 
     .file-chip-remove {
       background: none;
@@ -305,7 +274,6 @@
     }
     .file-chip-remove:hover { color: var(--danger); }
 
-    /* Output panel */
     .output-panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -338,12 +306,8 @@
       justify-content: space-between;
     }
 
-    .output-meta {
-      font-size: 0.65rem;
-      color: var(--muted);
-    }
+    .output-meta { font-size: 0.65rem; color: var(--muted); }
 
-    /* Action bar */
     .action-bar {
       display: flex;
       align-items: center;
@@ -380,20 +344,14 @@
       transform: translateY(-1px);
       box-shadow: 0 8px 24px rgba(200, 240, 90, 0.25);
     }
-    .btn-primary:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .btn-ghost {
       background: var(--surface);
       color: var(--muted);
       border: 1px solid var(--border);
     }
-    .btn-ghost:hover {
-      color: var(--text);
-      border-color: #3a3a46;
-    }
+    .btn-ghost:hover { color: var(--text); border-color: #3a3a46; }
 
     .btn-copy {
       background: var(--surface2);
@@ -404,7 +362,6 @@
     }
     .btn-copy:hover { border-color: var(--accent2); }
 
-    /* Status chip */
     .status-chip {
       display: none;
       align-items: center;
@@ -427,7 +384,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Error */
     .error-box {
       display: none;
       background: rgba(240, 90, 90, 0.06);
@@ -441,7 +397,6 @@
     }
     .error-box.visible { display: block; }
 
-    /* Divider */
     .section-divider {
       display: flex;
       align-items: center;
@@ -458,18 +413,6 @@
       height: 1px;
       background: var(--border);
     }
-
-    /* Cursor blink in output */
-    .cursor {
-      display: inline-block;
-      width: 2px;
-      height: 1em;
-      background: var(--accent);
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink 0.8s step-end infinite;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
   </style>
 </head>
 <body>
@@ -481,7 +424,6 @@
       NoteParse <span style="color:var(--accent)">2</span>
       <span class="logo-badge">BETA</span>
     </div>
-
   </header>
 
   <main>
@@ -490,7 +432,6 @@
     <p class="subtitle">Paste your text and upload reference documents. NoteParse 2 will rewrite your text to match the writing style of your uploaded samples — same ideas, different voice.</p>
 
     <div class="columns">
-      <!-- Left: Text input -->
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title"><div class="panel-dot active"></div> Your Text</div>
@@ -499,13 +440,11 @@
         <textarea id="input-text" placeholder="Paste or type the text you want to rewrite here...&#10;&#10;It can be anything — notes, paragraphs, ideas, drafts."></textarea>
       </div>
 
-      <!-- Right: File upload -->
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title"><div class="panel-dot accent2"></div> Style References</div>
           <span class="char-count" id="file-count">0 files</span>
         </div>
-
         <div class="upload-zone" id="drop-zone">
           <div class="upload-icon">📄</div>
           <div class="upload-text">
@@ -514,12 +453,10 @@
           </div>
           <input type="file" id="file-input" multiple accept=".txt,.md,.html,.htm,.pdf,.doc,.docx,.rtf" />
         </div>
-
         <div class="file-list" id="file-list"></div>
       </div>
     </div>
 
-    <!-- Action bar -->
     <div class="action-bar">
       <div class="left-actions">
         <button class="btn btn-primary" id="run-btn" disabled>
@@ -535,7 +472,6 @@
 
     <div class="error-box" id="error-box"></div>
 
-    <!-- Output -->
     <div class="section-divider" id="output-label" style="display:none">Output</div>
     <div class="output-panel" id="output-panel">
       <div class="panel-header">
@@ -550,14 +486,11 @@
   </main>
 
   <script>
-    // --- Config ---
-    const API_KEY = "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"; // 🔑 Replace this with your key
+    const API_KEY = "%%ANTHROPIC_API_KEY%%";
 
-    // --- State ---
     const files = [];
     let isRunning = false;
 
-    // --- DOM ---
     const inputText = document.getElementById('input-text');
     const charCount = document.getElementById('char-count');
     const fileCount = document.getElementById('file-count');
@@ -576,28 +509,16 @@
     const copyBtn = document.getElementById('copy-btn');
     const browseBtn = document.getElementById('browse-btn');
 
-
-    // --- Text input counter ---
     inputText.addEventListener('input', () => {
       charCount.textContent = inputText.value.length + ' chars';
       checkRunnable();
     });
 
-    // --- File handling ---
     browseBtn.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('click', (e) => {
-      if (e.target !== browseBtn) fileInput.click();
-    });
+    dropZone.addEventListener('click', (e) => { if (e.target !== browseBtn) fileInput.click(); });
+    fileInput.addEventListener('change', () => { handleFiles([...fileInput.files]); fileInput.value = ''; });
 
-    fileInput.addEventListener('change', () => {
-      handleFiles([...fileInput.files]);
-      fileInput.value = '';
-    });
-
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('drag-over');
-    });
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
@@ -644,28 +565,18 @@
     }
 
     function checkRunnable() {
-      const hasText = inputText.value.trim().length > 0;
-      const hasFiles = files.length > 0;
-      runBtn.disabled = !(hasText && hasFiles);
+      runBtn.disabled = !(inputText.value.trim().length > 0 && files.length > 0);
     }
 
-    // --- Read file as text ---
     function readFileText(file) {
       return new Promise((resolve, reject) => {
-        // For PDF files we can only get limited text via FileReader
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
         reader.onerror = () => reject(new Error('Could not read file: ' + file.name));
-        if (file.type === 'application/pdf') {
-          // Try to read raw text from PDF (works for text-based PDFs)
-          reader.readAsText(file);
-        } else {
-          reader.readAsText(file);
-        }
+        reader.readAsText(file);
       });
     }
 
-    // --- Clear ---
     clearBtn.addEventListener('click', () => {
       inputText.value = '';
       files.length = 0;
@@ -676,23 +587,11 @@
       checkRunnable();
     });
 
-    function hideOutput() {
-      outputPanel.classList.remove('visible');
-      outputLabel.style.display = 'none';
-    }
-    function showOutput() {
-      outputPanel.classList.add('visible');
-      outputLabel.style.display = 'flex';
-    }
-    function showError(msg) {
-      errorBox.textContent = msg;
-      errorBox.classList.add('visible');
-    }
-    function hideError() {
-      errorBox.classList.remove('visible');
-    }
+    function hideOutput() { outputPanel.classList.remove('visible'); outputLabel.style.display = 'none'; }
+    function showOutput() { outputPanel.classList.add('visible'); outputLabel.style.display = 'flex'; }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
 
-    // --- Copy ---
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(outputContent.dataset.plain || '').then(() => {
         copyBtn.textContent = '✓ Copied';
@@ -700,7 +599,6 @@
       });
     });
 
-    // --- Main run ---
     runBtn.addEventListener('click', async () => {
       if (isRunning) return;
       isRunning = true;
@@ -710,25 +608,21 @@
       statusChip.classList.add('visible');
       statusText.textContent = 'Reading your files...';
 
-      const apiKey = API_KEY;
       const userText = inputText.value.trim();
 
       try {
-        // Read all files
         const fileContents = [];
         for (const f of files) {
           statusText.textContent = `Reading "${f.name}"...`;
           const text = await readFileText(f);
-          // Take up to 3000 chars per file to stay within limits
           fileContents.push({ name: f.name, content: text.slice(0, 3000) });
         }
 
-        // Build prompt
         const styleExamples = fileContents.map((f, i) =>
           `--- Reference Document ${i + 1}: "${f.name}" ---\n${f.content}\n---`
         ).join('\n\n');
 
-        const systemPrompt = `You are a writing style analyst and rewriter. Your job is to take a piece of text provided by the user and rewrite it so it closely matches the writing style, tone, sentence structure, vocabulary level, punctuation habits, and voice found in the reference documents provided. 
+        const systemPrompt = `You are a writing style analyst and rewriter. Your job is to take a piece of text provided by the user and rewrite it so it closely matches the writing style, tone, sentence structure, vocabulary level, punctuation habits, and voice found in the reference documents provided.
 
 IMPORTANT RULES:
 - Preserve ALL the original meaning and information from the user's text.
@@ -745,7 +639,7 @@ IMPORTANT RULES:
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': apiKey,
+            'x-api-key': API_KEY,
             'anthropic-version': '2023-06-01',
             'anthropic-dangerous-direct-browser-access': 'true',
           },
@@ -759,13 +653,11 @@ IMPORTANT RULES:
 
         if (!response.ok) {
           const err = await response.json().catch(() => ({}));
-          const msg = err?.error?.message || `API error ${response.status}`;
-          throw new Error(msg);
+          throw new Error(err?.error?.message || `API error ${response.status}`);
         }
 
         const data = await response.json();
         const result = data.content?.find(b => b.type === 'text')?.text || '';
-
         if (!result) throw new Error('No output received from the model.');
 
         outputContent.dataset.plain = result;
@@ -777,7 +669,7 @@ IMPORTANT RULES:
         showOutput();
 
       } catch (err) {
-        showError('⚠ ' + (err.message || 'Something went wrong. Check your API key and try again.'));
+        showError('⚠ ' + (err.message || 'Something went wrong. Try again.'));
       } finally {
         isRunning = false;
         statusChip.classList.remove('visible');
