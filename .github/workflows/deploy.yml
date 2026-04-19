@@ -27,6 +27,7 @@ jobs:
       - name: Inject API key
         run: |
           sed -i "s|%%ANTHROPIC_API_KEY%%|${{ secrets.ANTHROPIC_API_KEY }}|g" index.html
+          sed -i "s|%%SAPLING_API_KEY%%|${{ secrets.SAPLING_API_KEY }}|g" index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
