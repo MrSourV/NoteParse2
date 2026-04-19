@@ -1168,7 +1168,7 @@ Then rewrite the user's text applying all of the above. Rules:
           const saplingRes = await fetch('https://api.sapling.ai/api/v1/aidetect', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ key: 'demo', text: result }),
+            body: JSON.stringify({ key: '%%SAPLING_API_KEY%%', text: result }),
           });
 
           if (!saplingRes.ok) throw new Error('Sapling unavailable');
