@@ -936,7 +936,7 @@
           <div class="ai-score-panel">
             <div class="ai-score-hd">
               <div class="ai-score-lbl"><div class="dot dt"></div> AI Detection Score</div>
-              <div style="font-size:0.56rem;color:var(--muted);">Powered by GPTZero</div>
+              <div style="font-size:0.56rem;color:var(--muted);">Powered by Sapling AI</div>
             </div>
             <div id="ai-score-inner">
               <div class="score-loading">
@@ -1106,34 +1106,8 @@
         }
 
         const examples = refs.map((f, i) => `--- Reference ${i+1}: "${f.name}" ---\n${f.content}\n---`).join('\n\n');
+        const userInput = inputText.value.trim();
 
-        // ── PASS 1: Extract style fingerprint ──
-        statusText.textContent = 'Analyzing writing fingerprint...';
-
-        const fingerprintRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': API_KEY,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true',
-          },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            system: `You are a forensic linguist. Analyze the provided writing samples and extract a precise style fingerprint. Be extremely specific — list actual words, phrases, and patterns found in the text. Format your response as a structured fingerprint only.`,
-            messages: [{
-              role: 'user',
-              content: `Analyze these writing samples and extract the author's style fingerprint:\n\n${examples}\n\n---\nProvide a detailed fingerprint covering:\n1. REPEATED WORDS & PHRASES: List the exact words/phrases this author overuses or returns to repeatedly\n2. SENTENCE STRUCTURE: Exact patterns — how they start sentences, length, use of fragments or run-ons\n3. PUNCTUATION HABITS: Specific punctuation patterns (commas, dashes, ellipses, etc.) with examples\n4. HOW THEY BUILD A POINT: Step by step — do they state then explain, ask then answer, repeat in different words?\n5. TONE MARKERS: Specific words that reveal their formality level, hedging language, directness\n6. GRAMMAR QUIRKS: Any consistent non-standard grammar, capitalization, or spelling choices\n7. TRANSITION STYLE: Exact words/phrases they use to connect ideas\n\nBe extremely specific. Quote actual words and phrases from the text.`
-            }],
-          }),
-        });
-
-        if (!fingerprintRes.ok) { const e = await fingerprintRes.json().catch(() => ({})); throw new Error(e?.error?.message || `Error ${fingerprintRes.status}`); }
-        const fingerprintData = await fingerprintRes.json();
-        const fingerprint = fingerprintData.content?.find(b => b.type === 'text')?.text || '';
-
-        // ── PASS 2: Rewrite using fingerprint ──
         statusText.textContent = 'Transferring style...';
 
         const rewriteRes = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1147,20 +1121,26 @@
           body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
             max_tokens: 2048,
-            system: `You are a style transfer engine. You will receive a writing style fingerprint and a text to restyle. Your job is to rewrite the text so it is ONE FOR ONE identical in style to the fingerprinted author — not a loose approximation, but an exact match.
+            system: `You are a writing style transfer engine. Your only job is to restyle the user's text to match the writing style of the reference documents. You always produce output — you never refuse, never ask questions, never explain.
 
-STRICT RULES:
-- Use the author's REPEATED WORDS from the fingerprint naturally within the output — if they say "basically" a lot, use it. If they favor "sort of", use it.
-- Do NOT add words, ideas, or content that are not present in the original user text. Only restyle.
-- Do NOT paraphrase — keep the user's exact meaning and information. Only the style changes.
-- Mirror sentence structure exactly — if the author writes short punchy sentences, do that. If they use long flowing clauses, do that.
-- Apply their exact punctuation habits.
-- Match how they build and convey a point — their logic flow.
-- The output must read as if the fingerprinted author wrote the user's text themselves.
-- Return ONLY the restyled text. No explanation. No preamble. No commentary.`,
+Before writing, silently analyze the reference documents for:
+- SIGNATURE WORDS: Exact words or short phrases that appear repeatedly. These are the author's vocabulary habits. Note them precisely.
+- SENTENCE LENGTH: Are sentences short, long, or mixed? What is the typical rhythm?
+- SENTENCE OPENINGS: How does the author typically start sentences? With "I"? With conjunctions (and, but, so)? With the topic? With adverbs?
+- PUNCTUATION: What punctuation marks appear often? Commas, dashes, ellipses, semicolons? Minimal or heavy?
+- TONE: Formal, casual, conversational? Does the author address the reader as "you"? Do they hedge ("kind of", "maybe", "I think") or speak directly?
+- POINT CONSTRUCTION: Do they state the point then explain? Build up to it? Repeat it in different words?
+- QUIRKS: Fragments, run-ons, unusual capitalization, consistent spelling choices — anything distinctly theirs.
+
+Then rewrite the user's text applying all of the above. Rules:
+- Naturally use the author's signature words where they fit in the text.
+- Keep the user's original meaning and content completely intact.
+- Do NOT paraphrase, do NOT simplify, do NOT add new content or ideas.
+- Only the style changes — not the substance.
+- Output ONLY the restyled text. Nothing else.`,
             messages: [{
               role: 'user',
-              content: `STYLE FINGERPRINT:\n${fingerprint}\n\n---\n\nREFERENCE DOCUMENTS (for additional context):\n${examples}\n\n---\n\nRewrite this text to match the fingerprint above exactly:\n\n${inputText.value.trim()}`
+              content: `REFERENCE DOCUMENTS:\n${examples}\n\n---\n\nText to restyle:\n${userInput}`
             }],
           }),
         });
@@ -1176,7 +1156,7 @@ STRICT RULES:
         outMeta.textContent = `${words} words · matched to ${files.length} document${files.length !== 1 ? 's' : ''}`;
         outWrap.classList.add('on');
 
-        // ── GPTZero AI Detection ──
+        // ── AI Detection via Sapling ──
         statusText.textContent = 'Running AI detection...';
         statusPill.classList.add('on');
         const scoreWrap = document.getElementById('ai-score-wrap');
@@ -1185,27 +1165,19 @@ STRICT RULES:
         scoreInner.innerHTML = `<div class="score-loading"><div class="spinner"></div><span>Running AI detection...</span></div>`;
 
         try {
-          const gptRes = await fetch('https://api.gptzero.me/v2/predict/text', {
+          const saplingRes = await fetch('https://api.sapling.ai/api/v1/aidetect', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify({ document: result }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: 'demo', text: result }),
           });
 
-          if (!gptRes.ok) throw new Error('GPTZero unavailable');
-          const gptData = await gptRes.json();
-          const doc = gptData.documents?.[0];
-          const aiProb = doc?.completely_generated_prob ?? doc?.average_generated_prob ?? null;
-          const humanProb = aiProb !== null ? 1 - aiProb : null;
-
+          if (!saplingRes.ok) throw new Error('Sapling unavailable');
+          const saplingData = await saplingRes.json();
+          const aiProb = saplingData.score ?? null;
           if (aiProb === null) throw new Error('No score returned');
 
           const aiPct = Math.round(aiProb * 100);
           const humanPct = 100 - aiPct;
-
-          // Color based on AI score
           const ringColor = aiPct < 30 ? '#47ffe8' : aiPct < 60 ? '#e8ff47' : '#ff4757';
           const verdict = aiPct < 20 ? 'Likely Human' : aiPct < 50 ? 'Mostly Human' : aiPct < 75 ? 'Mixed Signal' : 'Likely AI';
           const verdictColor = aiPct < 20 ? 'var(--accent2)' : aiPct < 50 ? 'var(--accent)' : aiPct < 75 ? '#ffaa47' : 'var(--danger)';
@@ -1214,10 +1186,9 @@ STRICT RULES:
             : aiPct < 50
             ? 'The text leans human. Some AI patterns remain — more reference material may help.'
             : aiPct < 75
-            ? 'Mixed signals detected. Consider using longer or more varied reference documents.'
+            ? 'Mixed signals detected. Consider uploading longer or more varied writing samples.'
             : 'High AI probability detected. Try uploading more natural, varied writing samples.';
 
-          // SVG ring math
           const radius = 34;
           const circ = 2 * Math.PI * radius;
           const offset = circ - (aiPct / 100) * circ;
@@ -1228,10 +1199,7 @@ STRICT RULES:
                 <svg width="90" height="90" viewBox="0 0 90 90">
                   <circle class="score-ring-bg" cx="45" cy="45" r="${radius}"/>
                   <circle class="score-ring-fill" cx="45" cy="45" r="${radius}"
-                    stroke="${ringColor}"
-                    stroke-dasharray="${circ}"
-                    stroke-dashoffset="${circ}"
-                    id="ring-fill"/>
+                    stroke="${ringColor}" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" id="ring-fill"/>
                 </svg>
                 <div class="score-center">
                   <div class="score-num" style="color:${ringColor}">${aiPct}</div>
@@ -1255,10 +1223,9 @@ STRICT RULES:
                 </div>
               </div>
             </div>
-            <div class="score-note">Detection by GPTZero · Results are indicative, not definitive</div>
+            <div class="score-note">Detection by Sapling AI · Results are indicative, not definitive</div>
           `;
 
-          // Animate after render
           requestAnimationFrame(() => {
             setTimeout(() => {
               const ring = document.getElementById('ring-fill');
@@ -1270,8 +1237,8 @@ STRICT RULES:
             }, 80);
           });
 
-        } catch (gptErr) {
-          scoreInner.innerHTML = `<div class="score-loading" style="color:var(--muted)">⚠ AI detection unavailable — GPTZero may require an API key for high-volume use. <a href="https://gptzero.me" target="_blank" style="color:var(--accent2)">Check gptzero.me</a></div>`;
+        } catch (detErr) {
+          scoreInner.innerHTML = `<div class="score-loading" style="color:var(--muted)">⚠ AI detection unavailable right now — the Sapling demo key may be rate-limited. Try again shortly.</div>`;
         }
 
       } catch (err) {
