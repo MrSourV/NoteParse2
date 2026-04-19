@@ -644,6 +644,174 @@
 
     .out-meta { font-size: 0.6rem; color: var(--muted); }
 
+    .ai-score-wrap {
+      display: none;
+      margin-top: 16px;
+    }
+    .ai-score-wrap.on {
+      display: block;
+      animation: outReveal 0.55s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .ai-score-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .ai-score-hd {
+      padding: 13px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .ai-score-lbl {
+      font-size: 0.56rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ai-score-body {
+      padding: 24px 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .score-ring-wrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+    }
+
+    .score-ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .score-ring-bg {
+      fill: none;
+      stroke: var(--border2);
+      stroke-width: 6;
+    }
+
+    .score-ring-fill {
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s cubic-bezier(0.16,1,0.3,1), stroke 0.5s;
+    }
+
+    .score-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .score-pct {
+      font-size: 0.5rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .score-details {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .score-verdict {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .score-desc {
+      font-size: 0.68rem;
+      color: var(--muted2);
+      line-height: 1.65;
+    }
+
+    .score-bar-row {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .score-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .score-bar-label {
+      font-size: 0.58rem;
+      color: var(--muted);
+      width: 80px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .score-bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 1s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .score-bar-val {
+      font-size: 0.58rem;
+      color: var(--muted2);
+      width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .score-note {
+      font-size: 0.58rem;
+      color: var(--muted);
+      padding: 12px 24px 16px;
+      border-top: 1px solid var(--border);
+      letter-spacing: 0.04em;
+    }
+
+    .score-loading {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.68rem;
+      color: var(--muted2);
+    }
+
     footer {
       padding: 30px 52px;
       border-top: 1px solid var(--border);
@@ -672,7 +840,7 @@
       <div class="terms-body">
         <div class="terms-item">
           <div class="ti-icon">✍️</div>
-          <div class="ti-text"><strong>Made by Kevin.</strong> Hey! Thank you for using this style adhering software, please follow the rules below. Keep in mind this is in it's beta testing phase, do expect bugs.</div>
+          <div class="ti-text"><strong>Style transfer only.</strong> This tool matches the writing style of your reference documents — not to copy or reproduce someone else's content.</div>
         </div>
         <div class="terms-item">
           <div class="ti-icon">🚫</div>
@@ -697,7 +865,7 @@
   <!-- APP -->
   <div id="app">
     <header>
-      <div class="logo"><span class="logo-np">NP</span>2 <span class="logo-badge">BETA</span></div>
+      <div class="logo"><span class="logo-np">NP</span>2 <span class="logo-badge">STYLE ENGINE</span></div>
     </header>
 
     <section class="hero">
@@ -760,6 +928,22 @@
           <div class="out-ft">
             <div class="out-meta" id="out-meta"></div>
             <button class="btn btn-copy" id="copy-btn">⎘ Copy to Clipboard</button>
+          </div>
+        </div>
+
+        <!-- AI Score Panel -->
+        <div class="ai-score-wrap" id="ai-score-wrap">
+          <div class="ai-score-panel">
+            <div class="ai-score-hd">
+              <div class="ai-score-lbl"><div class="dot dt"></div> AI Detection Score</div>
+              <div style="font-size:0.56rem;color:var(--muted);">Powered by GPTZero</div>
+            </div>
+            <div id="ai-score-inner">
+              <div class="score-loading">
+                <div class="spinner"></div>
+                <span>Running AI detection...</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -909,21 +1093,50 @@
     runBtn.addEventListener('click', async () => {
       if (running) return;
       running = true; runBtn.disabled = true;
-      errBox.classList.remove('on'); outWrap.classList.remove('on');
+      errBox.classList.remove('on');
+      outWrap.classList.remove('on');
+      document.getElementById('ai-score-wrap').classList.remove('on');
       statusPill.classList.add('on'); statusText.textContent = 'Reading files...';
 
       try {
         const refs = [];
         for (const f of files) {
           statusText.textContent = `Reading "${f.name}"...`;
-          refs.push({ name: f.name, content: (await readFile(f)).slice(0, 3000) });
+          refs.push({ name: f.name, content: (await readFile(f)).slice(0, 4000) });
         }
 
         const examples = refs.map((f, i) => `--- Reference ${i+1}: "${f.name}" ---\n${f.content}\n---`).join('\n\n');
 
-        statusText.textContent = 'Matching writing style...';
+        // ── PASS 1: Extract style fingerprint ──
+        statusText.textContent = 'Analyzing writing fingerprint...';
 
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
+        const fingerprintRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            system: `You are a forensic linguist. Analyze the provided writing samples and extract a precise style fingerprint. Be extremely specific — list actual words, phrases, and patterns found in the text. Format your response as a structured fingerprint only.`,
+            messages: [{
+              role: 'user',
+              content: `Analyze these writing samples and extract the author's style fingerprint:\n\n${examples}\n\n---\nProvide a detailed fingerprint covering:\n1. REPEATED WORDS & PHRASES: List the exact words/phrases this author overuses or returns to repeatedly\n2. SENTENCE STRUCTURE: Exact patterns — how they start sentences, length, use of fragments or run-ons\n3. PUNCTUATION HABITS: Specific punctuation patterns (commas, dashes, ellipses, etc.) with examples\n4. HOW THEY BUILD A POINT: Step by step — do they state then explain, ask then answer, repeat in different words?\n5. TONE MARKERS: Specific words that reveal their formality level, hedging language, directness\n6. GRAMMAR QUIRKS: Any consistent non-standard grammar, capitalization, or spelling choices\n7. TRANSITION STYLE: Exact words/phrases they use to connect ideas\n\nBe extremely specific. Quote actual words and phrases from the text.`
+            }],
+          }),
+        });
+
+        if (!fingerprintRes.ok) { const e = await fingerprintRes.json().catch(() => ({})); throw new Error(e?.error?.message || `Error ${fingerprintRes.status}`); }
+        const fingerprintData = await fingerprintRes.json();
+        const fingerprint = fingerprintData.content?.find(b => b.type === 'text')?.text || '';
+
+        // ── PASS 2: Rewrite using fingerprint ──
+        statusText.textContent = 'Transferring style...';
+
+        const rewriteRes = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -934,33 +1147,27 @@
           body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
             max_tokens: 2048,
-            system: `You are a forensic writing style analyst. Your job is to study the reference documents and extract the author's unique writing fingerprint, then rewrite the user's text so that someone who has read the reference documents would immediately recognize it as written by the same person.
+            system: `You are a style transfer engine. You will receive a writing style fingerprint and a text to restyle. Your job is to rewrite the text so it is ONE FOR ONE identical in style to the fingerprinted author — not a loose approximation, but an exact match.
 
-Step 1 — Build the author's style fingerprint from the reference documents:
-- SIGNATURE VOCABULARY: Words and phrases this author reaches for repeatedly. Filler words, transitions, intensifiers they overuse (e.g. "essentially", "basically", "actually", "sort of", "kind of", "you know").
-- MESSAGE CONVEYANCE: How do they build a point? Do they state it directly then explain? Ask rhetorical questions? Use analogies? Repeat the point in different words? Build up slowly or lead with the conclusion?
-- SENTENCE RHYTHM: Are sentences short and clipped, or long and winding? Do they mix both? How do they start sentences — with conjunctions, with adverbs, with the subject?
-- GRAMMAR & PUNCTUATION HABITS: Comma placement, use of dashes, colons, semicolons, ellipses, parentheses. Do they write in fragments intentionally? Run-on sentences?
-- TONE & REGISTER: Casual or formal? Do they talk to the reader directly ("you")? Do they hedge a lot ("might", "could", "perhaps") or speak with confidence?
-- QUIRKS: Unconventional capitalization, repeated structural patterns, how they open and close paragraphs, anything distinctly "them".
-
-Step 2 — Rewrite the user's text using that fingerprint:
-- Keep the user's original content, facts, and meaning intact entirely.
-- Do NOT paraphrase or simplify — only restyle.
-- Inject the author's signature words and phrases naturally where they fit.
-- Mirror how the author would convey this same message — their logic flow, their way of building the point.
-- Match sentence length patterns, punctuation habits, and tone precisely.
-- The goal: a reader familiar with the reference author should read the output and think "yes, this sounds exactly like them."
-
-Return ONLY the restyled text. No explanation, no preamble, no commentary.`,
-            messages: [{ role: 'user', content: `Reference documents:\n\n${examples}\n\n---\n\nRewrite this text to match that style:\n\n${inputText.value.trim()}` }],
+STRICT RULES:
+- Use the author's REPEATED WORDS from the fingerprint naturally within the output — if they say "basically" a lot, use it. If they favor "sort of", use it.
+- Do NOT add words, ideas, or content that are not present in the original user text. Only restyle.
+- Do NOT paraphrase — keep the user's exact meaning and information. Only the style changes.
+- Mirror sentence structure exactly — if the author writes short punchy sentences, do that. If they use long flowing clauses, do that.
+- Apply their exact punctuation habits.
+- Match how they build and convey a point — their logic flow.
+- The output must read as if the fingerprinted author wrote the user's text themselves.
+- Return ONLY the restyled text. No explanation. No preamble. No commentary.`,
+            messages: [{
+              role: 'user',
+              content: `STYLE FINGERPRINT:\n${fingerprint}\n\n---\n\nREFERENCE DOCUMENTS (for additional context):\n${examples}\n\n---\n\nRewrite this text to match the fingerprint above exactly:\n\n${inputText.value.trim()}`
+            }],
           }),
         });
 
-        if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e?.error?.message || `Error ${res.status}`); }
-
-        const data = await res.json();
-        const result = data.content?.find(b => b.type === 'text')?.text || '';
+        if (!rewriteRes.ok) { const e = await rewriteRes.json().catch(() => ({})); throw new Error(e?.error?.message || `Error ${rewriteRes.status}`); }
+        const rewriteData = await rewriteRes.json();
+        const result = rewriteData.content?.find(b => b.type === 'text')?.text || '';
         if (!result) throw new Error('No output received.');
 
         outBody.dataset.plain = result;
@@ -968,6 +1175,104 @@ Return ONLY the restyled text. No explanation, no preamble, no commentary.`,
         const words = result.split(/\s+/).filter(Boolean).length;
         outMeta.textContent = `${words} words · matched to ${files.length} document${files.length !== 1 ? 's' : ''}`;
         outWrap.classList.add('on');
+
+        // ── GPTZero AI Detection ──
+        statusText.textContent = 'Running AI detection...';
+        statusPill.classList.add('on');
+        const scoreWrap = document.getElementById('ai-score-wrap');
+        const scoreInner = document.getElementById('ai-score-inner');
+        scoreWrap.classList.add('on');
+        scoreInner.innerHTML = `<div class="score-loading"><div class="spinner"></div><span>Running AI detection...</span></div>`;
+
+        try {
+          const gptRes = await fetch('https://api.gptzero.me/v2/predict/text', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({ document: result }),
+          });
+
+          if (!gptRes.ok) throw new Error('GPTZero unavailable');
+          const gptData = await gptRes.json();
+          const doc = gptData.documents?.[0];
+          const aiProb = doc?.completely_generated_prob ?? doc?.average_generated_prob ?? null;
+          const humanProb = aiProb !== null ? 1 - aiProb : null;
+
+          if (aiProb === null) throw new Error('No score returned');
+
+          const aiPct = Math.round(aiProb * 100);
+          const humanPct = 100 - aiPct;
+
+          // Color based on AI score
+          const ringColor = aiPct < 30 ? '#47ffe8' : aiPct < 60 ? '#e8ff47' : '#ff4757';
+          const verdict = aiPct < 20 ? 'Likely Human' : aiPct < 50 ? 'Mostly Human' : aiPct < 75 ? 'Mixed Signal' : 'Likely AI';
+          const verdictColor = aiPct < 20 ? 'var(--accent2)' : aiPct < 50 ? 'var(--accent)' : aiPct < 75 ? '#ffaa47' : 'var(--danger)';
+          const desc = aiPct < 20
+            ? 'The restyled text reads as strongly human-written. Style transfer was effective.'
+            : aiPct < 50
+            ? 'The text leans human. Some AI patterns remain — more reference material may help.'
+            : aiPct < 75
+            ? 'Mixed signals detected. Consider using longer or more varied reference documents.'
+            : 'High AI probability detected. Try uploading more natural, varied writing samples.';
+
+          // SVG ring math
+          const radius = 34;
+          const circ = 2 * Math.PI * radius;
+          const offset = circ - (aiPct / 100) * circ;
+
+          scoreInner.innerHTML = `
+            <div class="ai-score-body">
+              <div class="score-ring-wrap">
+                <svg width="90" height="90" viewBox="0 0 90 90">
+                  <circle class="score-ring-bg" cx="45" cy="45" r="${radius}"/>
+                  <circle class="score-ring-fill" cx="45" cy="45" r="${radius}"
+                    stroke="${ringColor}"
+                    stroke-dasharray="${circ}"
+                    stroke-dashoffset="${circ}"
+                    id="ring-fill"/>
+                </svg>
+                <div class="score-center">
+                  <div class="score-num" style="color:${ringColor}">${aiPct}</div>
+                  <div class="score-pct">% AI</div>
+                </div>
+              </div>
+              <div class="score-details">
+                <div class="score-verdict" style="color:${verdictColor}">${verdict}</div>
+                <div class="score-desc">${desc}</div>
+                <div class="score-bar-row">
+                  <div class="score-bar-item">
+                    <div class="score-bar-label">AI</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width:0%;background:${ringColor}" id="bar-ai"></div></div>
+                    <div class="score-bar-val">${aiPct}%</div>
+                  </div>
+                  <div class="score-bar-item">
+                    <div class="score-bar-label">Human</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width:0%;background:var(--accent2)" id="bar-human"></div></div>
+                    <div class="score-bar-val">${humanPct}%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="score-note">Detection by GPTZero · Results are indicative, not definitive</div>
+          `;
+
+          // Animate after render
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              const ring = document.getElementById('ring-fill');
+              const barAi = document.getElementById('bar-ai');
+              const barHuman = document.getElementById('bar-human');
+              if (ring) ring.style.strokeDashoffset = offset;
+              if (barAi) barAi.style.width = aiPct + '%';
+              if (barHuman) barHuman.style.width = humanPct + '%';
+            }, 80);
+          });
+
+        } catch (gptErr) {
+          scoreInner.innerHTML = `<div class="score-loading" style="color:var(--muted)">⚠ AI detection unavailable — GPTZero may require an API key for high-volume use. <a href="https://gptzero.me" target="_blank" style="color:var(--accent2)">Check gptzero.me</a></div>`;
+        }
 
       } catch (err) {
         errBox.textContent = '⚠ ' + (err.message || 'Something went wrong. Please try again.');
